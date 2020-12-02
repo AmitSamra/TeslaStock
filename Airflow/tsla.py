@@ -12,10 +12,9 @@ import pandas as pd
 import papermill as pm
 import yfinance as yf
 from dotenv import load_dotenv
-
-
 dotenv_local_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True) 
+
 
 default_args = {
 	'owner':'Amit',
@@ -36,5 +35,14 @@ def etl_yf():
 	Performs ETL.
 	"""
 	tsla = yf.Ticker("TSLA")
-	df_tsla = tsla.history(start="2019-01-01", end="2020-12-01")
+	df_tsla = df_tsla.reset_index()
+	df_tsla.columns = df_tsla.columns.str.replace(' ', '').str.lower()
+	df_tsla = df_tsla.rename(columns={'stocksplits':'stock_splits'})
+	df_tsla['change'] = df_tsla['close']-df_tsla['close'].shift(1)
+	df_tsla['percent_change'] = (df_tsla['close']/df_tsla['close'].shift(1))-1
+	df_tsla['market_cap'] = df_tsla['close']*df_tsla['volume']/1000000
+	df_tsla[['open','high','low','close','change']] = df_tsla[['open','high','low','close','change']].round(2)
+	df_tsla[['percent_change']] = df_tsla[['percent_change']].round(4)
+	df_tsla[['market_cap']] = df_tsla[['market_cap']].round(1)
+	
 	
