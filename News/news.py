@@ -21,7 +21,7 @@ newsapi = NewsApiClient(api_key=os.environ.get("NEWS_API_KEY"))
 #with open(file_path, 'w') as f:
 #    json.dump(sources, f, indent=4, sort_keys=True)
 
-
+"""
 # Get total results needed for pagination
 news = newsapi.get_everything(
 q='Tesla',
@@ -34,7 +34,7 @@ page_size=100
 )
 total_results=news["totalResults"]
 max_page = math.ceil(total_results/100)
-
+"""
 
 """
 NewAPI does not allow more than 100 results per request so we cannot use the code below.
@@ -70,6 +70,9 @@ while page_count <= 1:
 """
 
 # Loop over dates and store result in CSV
+
+file_path = "./headlines.csv"
+
 start_date = '2020-11-03'
 end_date = '2020-12-03'
 
@@ -78,19 +81,31 @@ end2 = date( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
 increment = timedelta(days=1)
 
 i = start2
-
 while i <= end2:
     
     news = newsapi.get_everything(
     q = 'Tesla',
     sources = 'bloomberg, reuters',
-    from_param = start2,
-    to = end2,
+    from_param = i,
+    to = i,
     language = 'en',
-    sort_by = 'publishedAt',
-    page_size = 100,
-    page = page_count
+    sort_by = 'publishedAt'
     )
     
+    with open(file_path, 'w') as g:
+        for x in news['articles']:
+            g.write(f"{i.strftime('%Y-%m-%d')}, {x['source']['id']}, {x['title']}\n")
+            
     i += increment
+
+
+
+
+
+
+
+
+
+
+
 
