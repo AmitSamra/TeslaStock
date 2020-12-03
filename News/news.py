@@ -71,9 +71,20 @@ while page_count <= 1:
 
 # Loop over dates and store result in CSV
 
-file_path = "./headlines.csv"
+file_path_headlines = "./headlines.csv"
 
-start_date = '2020-11-03'
+# Delete csv to overwrite
+if os.path.exists(file_path_headlines):
+    os.remove(file_path_headlines)
+
+# Create new CSV with headers
+
+with open(file_path_headlines, 'w', newline='') as f:
+    w = csv.writer(f)
+    w.writerow(['date','source','title'])
+
+# Loop for article headlines
+start_date = '2020-12-01'
 end_date = '2020-12-03'
 
 start2 = date( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
@@ -85,27 +96,33 @@ while i <= end2:
     
     news = newsapi.get_everything(
     q = 'Tesla',
-    sources = 'bloomberg, reuters',
+    sources = 'Bloomberg, CNBC',
     from_param = i,
     to = i,
     language = 'en',
     sort_by = 'publishedAt'
     )
     
-    with open(file_path, 'w') as g:
+    with open(file_path_headlines, 'a') as g:
         for x in news['articles']:
             g.write(f"{i.strftime('%Y-%m-%d')}, {x['source']['id']}, {x['title']}\n")
             
     i += increment
 
 
+# Concatenate title columns
 
+file_path_headlines2 = './headlines2.csv'
 
-
-
-
-
-
+with open(file_path_headlines, 'r') as f, open(file_path_headlines2, 'w') as g:
+    r = csv.reader(f)
+    next(r) # Skip header row
+    w = csv.writer(g)
+    w.writerow(['date','source','title']) # Write header in g
+    
+    for row in r:
+        date, source, *content = [x.strip() for x in row] # Remove white spaces in title cells
+        w.writerow([date, source, ' '.join(content)]) # Merge cells 
 
 
 
