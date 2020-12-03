@@ -69,3 +69,28 @@ while page_count <= 1:
     page_count += 1
 """
 
+# Loop over dates and store result in CSV
+start_date = '2020-11-03'
+end_date = '2020-12-03'
+
+start2 = date( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
+end2 = date( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
+increment = timedelta(days=1)
+
+i = start2
+
+while i <= end2:
+    
+    news = newsapi.get_everything(
+    q = 'Tesla',
+    sources = 'bloomberg, reuters',
+    from_param = start2,
+    to = end2,
+    language = 'en',
+    sort_by = 'publishedAt',
+    page_size = 100,
+    page = page_count
+    )
+    
+    i += increment
+
