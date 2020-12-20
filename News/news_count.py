@@ -47,6 +47,6 @@ while i <= end2:
     )
     
     with open(file_path_news, 'a') as g:
-        g.write(f"{i.strftime('%Y-%m-%d')}, {news["totalResults"]}\n")
+        g.write(f"{i.strftime('%Y-%m-%d')}, {news['totalResults']}\n")
             
     i += increment
