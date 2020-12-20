@@ -85,7 +85,7 @@ with open(file_path_headlines, 'w', newline='') as f:
 
 # Loop for article headlines
 start_date = '2020-12-01'
-end_date = '2020-12-03'
+end_date = '2020-12-05'
 
 start2 = date( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
 end2 = date( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
@@ -123,6 +123,4 @@ with open(file_path_headlines, 'r') as f, open(file_path_headlines2, 'w') as g:
     for row in r:
         date, source, *content = [x.strip() for x in row] # Remove white spaces in title cells
         w.writerow([date, source, ' '.join(content)]) # Merge cells 
-
-
 
