@@ -69,7 +69,7 @@ while page_count <= 1:
     page_count += 1
 """
 
-# Loop over dates and store result in CSV
+# To get around 100 result limit, we will make a request for each day
 
 file_path_headlines = "./headlines.csv"
 
@@ -87,21 +87,25 @@ with open(file_path_headlines, 'w', newline='') as f:
 start_date = '2020-12-01'
 end_date = '2020-12-05'
 
-start2 = date( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
-end2 = date( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
+start_date2 = datetime( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
+end_date2 = datetime( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
 increment = timedelta(days=1)
 
-i = start2
-while i <= end2:
+i = start_date2
+while i <= end_date2:
     
     news = newsapi.get_everything(
     q = 'Tesla',
-    sources = 'Bloomberg, CNBC',
+    #sources = 'Bloomberg, Reuters',
+    domains = 'bloomberg.com',
     from_param = i,
     to = i,
     language = 'en',
     sort_by = 'publishedAt'
     )
+    
+    #with open(f"./headlines_{i.strftime('%Y-%m-%d')}", 'w') as f:
+    #    json.dump(news, f, indent=4, sort_keys=True)
     
     with open(file_path_headlines, 'a') as g:
         for x in news['articles']:
