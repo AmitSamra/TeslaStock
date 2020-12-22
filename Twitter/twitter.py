@@ -43,7 +43,29 @@ search_headers = {
     'Authorization': 'Bearer {}'.format(access_token)    
 }
 
-search_url = '{}1.1/search/tweets.json?q=%23tesla&result_type=recent'.format(base_url)
-search_resp = requests.get(search_url, headers=search_headers, params={'count':5, 'lang':'en'})
+search_params = {
+    'query': 'Tesla',
+    'fromDate': '202012010000',
+    'toDate': '202012050000',
+    'bucket': 'day'
+}
+
+search_url = '{}1.1/tweets/search/fullarchive/full/counts.json'.format(base_url)
+search_resp = requests.get(search_url, headers=search_headers, params=search_params)
 tweet_data = search_resp.json()
+
+
+# Save results in JSON file
+with open('./tsla_tweet_count.json', 'w') as f:
+    json.dump(tweet_data, f, indent=4, sort_keys=True)
+
+
+# Save only releveant portion of request
+relevant_data = []
+with open('./tsla_tweet_count.json', 'r') as f:
+    data = json.load(f)
+
+for i in data['results']:
+    relevant_data.append(i)
+
 
