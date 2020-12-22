@@ -5,6 +5,8 @@ import os
 import csv
 from datetime import datetime, date
 
+
+############################################################
 # Authentication
 
 # Load Keys
@@ -31,4 +33,17 @@ auth_data = {
 
 auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
 access_token = auth_resp.json()['access_token']
+
+
+############################################################
+# Search
+
+# Make queries
+search_headers = {
+    'Authorization': 'Bearer {}'.format(access_token)    
+}
+
+search_url = '{}1.1/search/tweets.json?q=%23tesla&result_type=recent'.format(base_url)
+search_resp = requests.get(search_url, headers=search_headers, params={'count':5, 'lang':'en'})
+tweet_data = search_resp.json()
 
