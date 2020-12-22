@@ -46,7 +46,7 @@ search_headers = {
 search_params = {
     'query': 'Tesla',
     'fromDate': '202012010000',
-    'toDate': '202012050000',
+    'toDate': '202012060000',
     'bucket': 'day'
 }
 
@@ -66,6 +66,6 @@ with open('./tsla_tweet_count.json', 'r') as f:
     data = json.load(f)
 
 for i in data['results']:
-    relevant_data.append(i)
+    relevant_data.append({'tweet_date':i['timePeriod'][0:8], 'tweet_count':i['count']})
 
 
