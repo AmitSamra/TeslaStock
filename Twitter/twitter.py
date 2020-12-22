@@ -76,4 +76,28 @@ for i in relevant_data:
 for i in relevant_data:
     i['tweet_date']=datetime.strftime(i['tweet_date'],'%Y-%m-%d')
 
+relevant_data
+    
+# Save relevant data in CSV
+with open('./tslta_tweet_count.csv', 'w', newline='') as f:
+    w = csv.writer(f)
+    w.writerow(['tweet_date', 'tweet_count'])
+    
+    count = 0
+    for i in relevant_data:
+        if count == 0:
+            pass
+            #header = i.keys()
+            #w.writerow(header)
+            #count += 1
+        w.writerow(i.values())
+
+
+
+
+
+
+
+
+
 
