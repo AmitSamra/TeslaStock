@@ -68,4 +68,12 @@ with open('./tsla_tweet_count.json', 'r') as f:
 for i in data['results']:
     relevant_data.append({'tweet_date':i['timePeriod'][0:8], 'tweet_count':i['count']})
 
+# Convert tweet_date to datetime object
+for i in relevant_data:
+    i['tweet_date'] = datetime.strptime(i['tweet_date'], '%Y%m%d')
+
+# Reformat date
+for i in relevant_data:
+    i['tweet_date']=datetime.strftime(i['tweet_date'],'%Y-%m-%d')
+
 
