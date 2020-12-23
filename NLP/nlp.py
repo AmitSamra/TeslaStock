@@ -54,5 +54,7 @@ for index, row in df.iterrows():
             headline_neu.append(word)
 
     score = round((1*len(headline_pos) - 1*len(headline_neg) + 0*len(headline_neu))/len(headline_filtered),2)
+    
+    df.at[index, 'sentiment_score'] = score
 
     
