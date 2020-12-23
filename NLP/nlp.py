@@ -28,3 +28,20 @@ for i in tokens:
         headline_filtered.append(i)
 
 
+# Analyze sentiment 
+sid = SentimentIntensityAnalyzer()
+
+headline_pos = []
+headline_neu = []
+headline_neg = []
+
+for word in headline_filtered:
+        if (sid.polarity_scores(word)['compound']) >= 0.5:
+            headline_pos.append(word)
+        elif (sid.polarity_scores(word)['compound']) <= -0.5:
+            headline_neg.append(word)
+        else:
+            headline_neu.append(word)
+
+score = round((1*len(headline_pos) - 1*len(headline_neg) + 0*len(headline_neu))/len(headline_filtered),2)
+
