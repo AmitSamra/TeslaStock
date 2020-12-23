@@ -54,7 +54,19 @@ for index, row in df.iterrows():
             headline_neu.append(word)
 
     score = round((1*len(headline_pos) - 1*len(headline_neg) + 0*len(headline_neu))/len(headline_filtered),2)
-    
     df.at[index, 'sentiment_score'] = score
 
-    
+
+# Create a copy of df_headlines to perform grouping operations
+df2 = df.copy()
+df2.drop(['source', 'title'], axis=1, inplace=True)
+
+
+# Group headlines by date and calculate average score
+df2_group = df2.groupby('date', as_index=False).mean()
+df2_group = df2_group.rename(columns = {'sentiment_score': 'daily_sentiment_score'})
+
+
+# Save df_group to csv
+df2_group.to_csv('sentiment_score.csv', index=False)
+
