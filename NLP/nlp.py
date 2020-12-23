@@ -37,7 +37,7 @@ for index, row in df.iterrows():
     
     stop_words = stopwords.words('english')
     headline_filtered = []
-    for i in tokens:
+    for i in token:
         if i not in stop_words:
             headline_filtered.append(i) 
     
@@ -46,9 +46,9 @@ for index, row in df.iterrows():
     headline_neg = []
     
     for word in headline_filtered:
-        if (sid.polarity_scores(word)['compound']) >= 0.5:
+        if (sid.polarity_scores(word)['compound']) > 0:
             headline_pos.append(word)
-        elif (sid.polarity_scores(word)['compound']) <= -0.5:
+        elif (sid.polarity_scores(word)['compound']) < 0:
             headline_neg.append(word)
         else:
             headline_neu.append(word)
@@ -67,6 +67,6 @@ df2_group = df2.groupby('date', as_index=False).mean()
 df2_group = df2_group.rename(columns = {'sentiment_score': 'daily_sentiment_score'})
 
 
-# Save df_group to csv
+# Save df2_group to csv
 df2_group.to_csv('sentiment_score.csv', index=False)
 
