@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 dotenv_local_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True) 
 
+# ----------------------------------------------------------------------------------------------------
+# Setup DAG
 
 default_args = {
 	'owner':'Amit',
@@ -29,15 +31,17 @@ dag = DAG(
 	max_active_runs = 1
 )
 
-def etl_yf():
+# ----------------------------------------------------------------------------------------------------
+# Obtain TSLA stock data from yFinance API
+
+def etl_yfinance():
 	"""
 	Gets stock data from yfinance API.
 	Performs ETL.
 	"""
 	tsla = yf.Ticker("TSLA")
 	df_tsla = df_tsla.reset_index()
-	df_tsla.columns = df_tsla.columns.str.replace(' ', '').str.lower()
-	df_tsla = df_tsla.rename(columns={'stocksplits':'stock_splits'})
+	df_tsla.columns = df_tsla.columns.str.replace(' ', '_').str.lower()
 	df_tsla['change'] = df_tsla['close']-df_tsla['close'].shift(1)
 	df_tsla['percent_change'] = (df_tsla['close']/df_tsla['close'].shift(1))-1
 	df_tsla['market_cap'] = df_tsla['close']*df_tsla['volume']/1000000
@@ -45,4 +49,14 @@ def etl_yf():
 	df_tsla[['percent_change']] = df_tsla[['percent_change']].round(4)
 	df_tsla[['market_cap']] = df_tsla[['market_cap']].round(1)
 	
-	
+
+t1 = PythonOperator(
+	task_id = 'etl_yfinance_data',
+	python_callable = etl_yfinance,
+	provide_context = False,
+	dag = dag
+)
+
+
+# ----------------------------------------------------------------------------------------------------
+# 
