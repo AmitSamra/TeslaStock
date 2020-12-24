@@ -2,18 +2,32 @@ import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
-from datetime import timedelta, datetime
-import csv
-import requests
+import papermill as pm
 import os
-from airflow.operators.postgres_operator import PostgresOperator
 import numpy as np
 import pandas as pd
-import papermill as pm
 import yfinance as yf
+from newsapi import NewsApiClient
+import json
+import math
+from datetime import datetime, timedelta, date
+import csv
+import base64
+import requests
+import html
+import nltk
+from nltk import regexp_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from dotenv import load_dotenv
+dotenv_local_path = './.env'""
+load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
+
 from dotenv import load_dotenv
 dotenv_local_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True) 
+
 
 # ----------------------------------------------------------------------------------------------------
 # Setup DAG
@@ -59,4 +73,88 @@ t1 = PythonOperator(
 
 
 # ----------------------------------------------------------------------------------------------------
+# Obtain headlines from NewsAPI
+
+def get_headlines():
+	"""
+	Gets headlines mentioning Tesla from bloomberg.com
+	"""
+	newsapi = NewsApiClient(api_key=os.environ.get("NEWS_API_KEY"))
+
+	# To get around 100 result limit, we will make a request for each day
+	file_path_headlines = "./headlines.csv"
+
+	# Delete csv to overwrite
+	if os.path.exists(file_path_headlines):
+	    os.remove(file_path_headlines)
+
+	# Create new CSV with headers
+	with open(file_path_headlines, 'w', newline='') as f:
+	    w = csv.writer(f)
+	    w.writerow(['date','source','title'])
+
+	# Loop for article headlines
+	start_date = '2020-12-01'
+	end_date = '2020-12-23'
+
+	start_date2 = datetime( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
+	end_date2 = datetime( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
+	increment = timedelta(days=1)
+
+	i = start_date2
+	while i <= end_date2:
+	    
+	    news = newsapi.get_everything(
+	    q = 'Tesla',
+	    #sources = 'Bloomberg, Reuters',
+	    domains = 'bloomberg.com',
+	    from_param = i,
+	    to = i,
+	    language = 'en',
+	    sort_by = 'publishedAt'
+	    )
+	    
+	    with open(file_path_headlines, 'a') as g:
+	        for x in news['articles']:
+	            g.write(f"{i.strftime('%Y-%m-%d')}, {x['source']['id']}, {x['title']}\n")
+	            
+	    i += increment
+
+
+t2 = PythonOperator(
+	task_id = 'get_newsapi_headlines',
+	python_callable = get_headlines,
+	provide_context = False,
+	dag = dag
+)
+
+
+# ----------------------------------------------------------------------------------------------------
 # 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
