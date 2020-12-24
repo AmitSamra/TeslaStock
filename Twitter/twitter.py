@@ -56,9 +56,9 @@ tweet_data = search_resp.json()
 
 
 # Save results in JSON file
-with open('./tsla_tweet_count.json', 'w') as f:
+with open('/Users/amit/Coding/Projects/TeslaStock/Twitter/tweet_count.json', 'w') as f:
     json.dump(tweet_data, f, indent=4, sort_keys=True)
-
+    
 
 # Save only releveant portion of request
 relevant_data = []
@@ -79,7 +79,7 @@ for i in relevant_data:
 relevant_data
     
 # Save relevant data in CSV
-with open('./tslta_tweet_count.csv', 'w', newline='') as f:
+with open('/Users/amit/Coding/Projects/TeslaStock/Twitter/tweet_count.csv', 'w', newline='') as f:
     w = csv.writer(f)
     w.writerow(['tweet_date', 'tweet_count'])
     
@@ -91,13 +91,4 @@ with open('./tslta_tweet_count.csv', 'w', newline='') as f:
             #w.writerow(header)
             #count += 1
         w.writerow(i.values())
-
-
-
-
-
-
-
-
-
 

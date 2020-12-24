@@ -56,7 +56,7 @@ headlines = BashOperator(
 # ----------------------------------------------------------------------------------------------------
 # Obtain total article count
 
-newsapi_path = '/Users/amit/Coding/Projects/TeslaStock/News/news_count.py'
+newsapi_path = '/Users/amit/Coding/Projects/TeslaStock/News/article_count.py'
 
 article_count = BashOperator(
 	task_id = 'article_count_csv',
@@ -69,7 +69,7 @@ article_count = BashOperator(
 
 tweet_path = '/Users/amit/Coding/Projects/TeslaStock/Twitter/twitter.py'
 
-article_count = BashOperator(
+tweet_count = BashOperator(
 	task_id = 'tweet_count_csv',
 	bash_command = 'python {}'.format(twitter_path)
 	dag = dag
@@ -78,10 +78,10 @@ article_count = BashOperator(
 # ----------------------------------------------------------------------------------------------------
 # Perform NLP on headlines
 
-tweet_path = '/Users/amit/Coding/Projects/TeslaStock/Twitter/twitter.py'
+nlp_path = '/Users/amit/Coding/Projects/TeslaStock/NLP/nlp.py'
 
-article_count = BashOperator(
-	task_id = 'tweet_count_csv',
+nlp = BashOperator(
+	task_id = 'sentiment_score_csv',
 	bash_command = 'python {}'.format(twitter_path)
 	dag = dag
 )
@@ -96,7 +96,10 @@ article_count = BashOperator(
 
 
 
+# ----------------------------------------------------------------------------------------------------
+# Dependencies
 
+yfinance >> headlines >> article_count >> tweet_count >> nlp
 
 
 

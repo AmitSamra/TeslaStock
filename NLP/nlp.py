@@ -11,24 +11,10 @@ load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
 
 # Import headlines2.csv
-df = pd.read_csv('./headlines2.csv')
-title1 = df.iloc[0]['title']
+df = pd.read_csv('/Users/amit/Coding/Projects/TeslaStock/News/headlines2.csv', parse_dates=['date'])
 
 
-# Tokenize title
-token = nltk.word_tokenize(title1)
-
-
-# Remove stopwords from title
-stop_words = stopwords.words('english')
-
-headline_filtered = []
-for i in tokens:
-    if i not in stop_words:
-        headline_filtered.append(i)
-
-
-# Analyze sentiment 
+# Generate sentiment score
 sid = SentimentIntensityAnalyzer()
 
 for index, row in df.iterrows():
@@ -68,5 +54,4 @@ df2_group = df2_group.rename(columns = {'sentiment_score': 'daily_sentiment_scor
 
 
 # Save df2_group to csv
-df2_group.to_csv('sentiment_score.csv', index=False)
-
+df2_group.to_csv('/Users/amit/Coding/Projects/TeslaStock/NLP/sentiment_score.csv', index=False)

@@ -71,7 +71,7 @@ while page_count <= 1:
 
 # To get around 100 result limit, we will make a request for each day
 
-file_path_headlines = "./headlines.csv"
+file_path_headlines = '/Users/amit/Coding/Projects/TeslaStock/News/headlines.csv'
 
 # Delete csv to overwrite
 if os.path.exists(file_path_headlines):
@@ -116,7 +116,7 @@ while i <= end_date2:
 
 # Concatenate title columns
 
-file_path_headlines2 = './headlines2.csv'
+file_path_headlines2 = '/Users/amit/Coding/Projects/TeslaStock/News/headlines2.csv'
 
 with open(file_path_headlines, 'r') as f, open(file_path_headlines2, 'w') as g:
     r = csv.reader(f)

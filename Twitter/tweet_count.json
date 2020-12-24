@@ -1,0 +1,98 @@
+{
+    "requestParameters": {
+        "bucket": "day",
+        "fromDate": "202012010000",
+        "toDate": "202012230000"
+    },
+    "results": [
+        {
+            "count": 30636,
+            "timePeriod": "202012010000"
+        },
+        {
+            "count": 25364,
+            "timePeriod": "202012020000"
+        },
+        {
+            "count": 29568,
+            "timePeriod": "202012030000"
+        },
+        {
+            "count": 23796,
+            "timePeriod": "202012040000"
+        },
+        {
+            "count": 23034,
+            "timePeriod": "202012050000"
+        },
+        {
+            "count": 19508,
+            "timePeriod": "202012060000"
+        },
+        {
+            "count": 25896,
+            "timePeriod": "202012070000"
+        },
+        {
+            "count": 36994,
+            "timePeriod": "202012080000"
+        },
+        {
+            "count": 38197,
+            "timePeriod": "202012090000"
+        },
+        {
+            "count": 40976,
+            "timePeriod": "202012100000"
+        },
+        {
+            "count": 34811,
+            "timePeriod": "202012110000"
+        },
+        {
+            "count": 26992,
+            "timePeriod": "202012120000"
+        },
+        {
+            "count": 38082,
+            "timePeriod": "202012130000"
+        },
+        {
+            "count": 33883,
+            "timePeriod": "202012140000"
+        },
+        {
+            "count": 32311,
+            "timePeriod": "202012150000"
+        },
+        {
+            "count": 48102,
+            "timePeriod": "202012160000"
+        },
+        {
+            "count": 41025,
+            "timePeriod": "202012170000"
+        },
+        {
+            "count": 39816,
+            "timePeriod": "202012180000"
+        },
+        {
+            "count": 33788,
+            "timePeriod": "202012190000"
+        },
+        {
+            "count": 33458,
+            "timePeriod": "202012200000"
+        },
+        {
+            "count": 52503,
+            "timePeriod": "202012210000"
+        },
+        {
+            "count": 50256,
+            "timePeriod": "202012220000"
+        }
+    ],
+    "totalCount": 758996
+}
