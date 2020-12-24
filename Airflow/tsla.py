@@ -71,7 +71,6 @@ t1 = PythonOperator(
 	dag = dag
 )
 
-
 # ----------------------------------------------------------------------------------------------------
 # Obtain headlines from NewsAPI
 
@@ -128,16 +127,62 @@ t2 = PythonOperator(
 	dag = dag
 )
 
+# ----------------------------------------------------------------------------------------------------
+# Obtain total headlines count
+
+def get_article_count():
+	"""
+	Gets count of all articles mentioning Tesla. 
+	The source is not limited to all articles written in English.
+	There is no limitation on source (can be publishers besides Bloomberg).
+	"""
+
+	file_path_news = "./news_count.csv"
+
+	# Delete csv to overwrite
+	if os.path.exists(file_path_news):
+	    os.remove(file_path_news)
+
+	# Create new CSV with headers
+	with open(file_path_news, 'w', newline='') as f:
+	    w = csv.writer(f)
+	    w.writerow(['date','number_articles'])
+
+	# Loop for article headlines
+	start_date = '2020-12-01'
+	end_date = '2020-12-23'
+
+	start2 = datetime( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
+	end2 = datetime( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )
+	increment = timedelta(days=1)
+
+	i = start2
+	while i <= end2:
+	    
+	    news = newsapi.get_everything(
+	    q = 'Tesla',
+	    domains = 'bloomberg.com',
+	    from_param = i,
+	    to = i,
+	    language = 'en',
+	    sort_by = 'publishedAt'
+	    )
+	    
+	    with open(file_path_news, 'a') as g:
+	        g.write(f"{i.strftime('%Y-%m-%d')}, {news['totalResults']}\n")
+	            
+	    i += increment
+
+
+t3 = PythonOperator(
+	task_id = 'get_article_count',
+	python_callable = get_article_count,
+	provide_context = False,
+	dag = dag
+)
 
 # ----------------------------------------------------------------------------------------------------
 # 
-
-
-
-
-
-
-
 
 
 
