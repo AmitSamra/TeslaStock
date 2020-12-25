@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+import statsmodels.formula.api as sm
 
 
 # Merge yfinance data with 
@@ -47,5 +48,8 @@ df_merged.daily_sentiment_score.loc[(df_merged.day_week == 'Monday') & (df_merge
 df_merged = df_merged.drop(df_merged.index[df_merged.day_week == 'Saturday'], axis=0)
 df_merged = df_merged.drop(df_merged.index[df_merged.day_week == 'Sunday'], axis=0)
 
+
+# Final DataFrame
+df_merged.to_csv('/Users/amit/Coding/Projects/TeslaStock/Regression/final_df.csv', index=False)
 
 
