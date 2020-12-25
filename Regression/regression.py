@@ -22,3 +22,15 @@ df_merged = df_merged.drop(['high', 'low', 'volume', 'dividends', 'stock_splits'
 df_merged = df_merged.sort_values('date')
 df_merged['day_week'] = df_merged['date'].dt.day_name()
 
+
+# Fill dates for the weekends
+all_dates = pd.date_range(start='2020-12-01', end='2020-12-23', freq='D')
+all_dates = pd.DataFrame({'date':all_dates})
+df_merged = pd.merge(df_merged, all_dates, on='date', how='outer')
+df_merged = df_merged.sort_values('date')
+df_merged['day_week'] = df_merged['date'].dt.day_name()
+
+# Fill in na values
+df_merged['daily_sentiment_score'] = df_merged['daily_sentiment_score'].fillna(0)
+
+
