@@ -5,9 +5,8 @@ from airflow.operators.python_operator import PythonOperator
 import os
 from datetime import datetime, timedelta, date
 import papermill as pm
-
 from dotenv import load_dotenv
-dotenv_local_path = './.env'
+dotenv_local_path = '/Users/amit/Coding/Projects/TeslaStock/.env'
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
 
@@ -102,8 +101,8 @@ regression_notebook_out_path = '/Users/amit/Coding/Projects/TeslaStock/Regressio
 def run_regression_notebook():
 	pm.execute_notebook(regression_notebook_in_path, regression_notebook_out_path)
 
-run_regression_notebook = PythonOperator(
-	task_id = 'run_regression_notebook',
+regression_notebook = PythonOperator(
+	task_id = 'regression_notebook',
 	python_callable = run_regression_notebook
 	dag = dag
 )
@@ -111,4 +110,4 @@ run_regression_notebook = PythonOperator(
 # ----------------------------------------------------------------------------------------------------
 # Dependencies
 
-yfinance >> headlines >> article_count >> tweet_count >> nlp >> final_df >> run_regression_notebook
+yfinance >> headlines >> article_count >> tweet_count >> nlp >> final_df >> regression_notebook

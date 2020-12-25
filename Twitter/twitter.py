@@ -4,6 +4,9 @@ import json
 import os
 import csv
 from datetime import datetime, date
+from dotenv import load_dotenv
+dotenv_local_path = '/Users/amit/Coding/Projects/TeslaStock/.env'
+load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
 
 ############################################################
@@ -38,15 +41,21 @@ access_token = auth_resp.json()['access_token']
 ############################################################
 # Search
 
-# Make queries
+START_DATE = os.environ.get('START_DATE')
+END_DATE = os.environ.get('END_DATE')
+
+start_date = START_DATE[0:4] + START_DATE[5:7] + START_DATE[8:10] + '0000'
+end_date = END_DATE[0:4] + END_DATE[5:7] + str(int(END_DATE[8:10])+1) + '0000'
+
+# Premium search for tweet count
 search_headers = {
     'Authorization': 'Bearer {}'.format(access_token)    
 }
 
 search_params = {
     'query': 'Tesla',
-    'fromDate': '202012010000',
-    'toDate': '202012060000',
+    'fromDate': start_date,
+    'toDate': end_date,
     'bucket': 'day'
 }
 
@@ -62,7 +71,7 @@ with open('/Users/amit/Coding/Projects/TeslaStock/Twitter/tweet_count.json', 'w'
 
 # Save only releveant portion of request
 relevant_data = []
-with open('./tsla_tweet_count.json', 'r') as f:
+with open('/Users/amit/Coding/Projects/TeslaStock/Twitter/tweet_count.json', 'r') as f:
     data = json.load(f)
 
 for i in data['results']:

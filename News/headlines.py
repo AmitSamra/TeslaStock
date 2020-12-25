@@ -7,7 +7,7 @@ import json
 import math
 from datetime import timedelta, datetime
 from dotenv import load_dotenv
-dotenv_local_path = '../.env'
+dotenv_local_path = '/Users/amit/Coding/Projects/TeslaStock/.env'
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
 
@@ -84,8 +84,8 @@ with open(file_path_headlines, 'w', newline='') as f:
     w.writerow(['date','source','title'])
 
 # Loop for article headlines
-start_date = '2020-12-01'
-end_date = '2020-12-05'
+start_date = os.environ.get('START_DATE')
+end_date = os.environ.get('END_DATE')
 
 start_date2 = datetime( int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]) )
 end_date2 = datetime( int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]) )

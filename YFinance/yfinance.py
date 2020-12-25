@@ -2,9 +2,24 @@ import os
 import numpy as np
 import pandas as pd
 import yfinance as yf
+from dotenv import load_dotenv
+dotenv_local_path = '/Users/amit/Coding/Projects/TeslaStock/.env'
+load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
+# Create connection for TSLA
 tsla = yf.Ticker("TSLA")
-hist = tsla.history(start="2020-12-01", end="2020-12-23")
+
+
+# Use environment variable to access start & end dates
+#hist = tsla.history(start="2020-12-01", end="2020-12-23")
+END_DATE = os.environ.get('END_DATE')
+END_DATE = datetime( int(END_DATE[0:4]), int(END_DATE[5:7]), int(END_DATE[8:10]) )
+increment = timedelta(days=1)
+END_DATE = END_DATE + increment
+hist = tsla.history(start=os.environ.get('START_DATE'), end=END_DATE)
+
+
+# Wrangle yfinance data
 df_tsla = hist
 df_tsla = df_tsla.reset_index()
 df_tsla.columns = df_tsla.columns.str.replace(' ', '_').str.lower()
