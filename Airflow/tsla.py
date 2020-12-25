@@ -3,12 +3,8 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 import os
-import numpy as np
-import pandas as pd
-import json
 from datetime import datetime, timedelta, date
-import csv
-import requests
+import papermill as pm
 
 from dotenv import load_dotenv
 dotenv_local_path = './.env'
@@ -89,27 +85,30 @@ nlp = BashOperator(
 # ----------------------------------------------------------------------------------------------------
 # Combine stock price, article count & sentiment score into one df
 
+final_df_path = '/Users/amit/Coding/Projects/TeslaStock/Regression/final_df.py'
 
+final_df = BashOperator(
+	task_id = 'final_df',
+	bash_command = 'python {}'.format(final_df_path)
+	dag = dag
+)
 
+# ----------------------------------------------------------------------------------------------------
+# Run regression notebook
 
+regression_notebook_in_path = '/Users/amit/Coding/Projects/TeslaStock/Regression/regression_input.ipynb'
+regression_notebook_out_path = '/Users/amit/Coding/Projects/TeslaStock/Regression/regression_output.ipynb'
 
+def run_regression_notebook():
+	pm.execute_notebook(regression_notebook_in_path, regression_notebook_out_path)
 
-
+run_regression_notebook = PythonOperator(
+	task_id = 'run_regression_notebook',
+	python_callable = run_regression_notebook
+	dag = dag
+)
 
 # ----------------------------------------------------------------------------------------------------
 # Dependencies
 
-yfinance >> headlines >> article_count >> tweet_count >> nlp
-
-
-
-
-
-
-
-
-
-
-
-
-
+yfinance >> headlines >> article_count >> tweet_count >> nlp >> final_df >> run_regression_notebook
