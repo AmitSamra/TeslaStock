@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, date
 import csv
 import nltk
 from dotenv import load_dotenv
-dotenv_local_path = './.env'""
+dotenv_local_path = '/Users/amit/Coding/Projects/TeslaStock/.env'
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
 
