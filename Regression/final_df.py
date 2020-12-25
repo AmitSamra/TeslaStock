@@ -45,8 +45,7 @@ df_merged.daily_sentiment_score.loc[(df_merged.day_week == 'Monday') & (df_merge
 
 
 # Remove weekends since no stock is traded
-df_merged = df_merged.drop(df_merged.index[df_merged.day_week == 'Saturday'], axis=0)
-df_merged = df_merged.drop(df_merged.index[df_merged.day_week == 'Sunday'], axis=0)
+df_merged = df_merged.drop(df_merged.index[df_merged.day_week.isin(['Saturday', 'Sunday'])], axis=0)
 
 
 # Final DataFrame
